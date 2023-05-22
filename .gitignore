@@ -18,6 +18,14 @@ yarn-error.log
 /.idea
 /.vscode
 /database
-/public/assets
+/public/assets/images
+/public/assets/fonts
+/public/assets/plugins
+/public/assets/scss
+/public/assets/js/pages
+/public/assets/css/pages
+/public/assets/css/layouts
+
+
 /storage
 /tests
