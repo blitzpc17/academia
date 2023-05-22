@@ -9,7 +9,7 @@ use App\Models\Personas;
 class EstudiantesController extends Controller
 {
     public function Index(Request $r){
-        return view('Admin.registros');
+        return view('Admin.estudiantes_registros');
     }
 
     public function Save(Request $r){

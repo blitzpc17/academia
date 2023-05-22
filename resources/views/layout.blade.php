@@ -14,8 +14,8 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Favicon icon -->
-    <link rel="icon" href="{{asset('assets/images/favicon.ico')}}" type="image/x-icon">
+     <!-- Favicon icon -->
+     <link rel="icon" href="{{asset('assets/images/logos/favicon-16x16.png')}}" type="image/x-icon">
     <!-- fontawesome icon -->
     <link rel="stylesheet" href="{{asset('assets/fonts/fontawesome/css/fontawesome-all.min.css')}}">
     <!-- animation css -->
@@ -26,6 +26,15 @@
      <link rel="stylesheet" href="{{asset('assets/plugins/data-tables/css/datatables.min.css')}}">
      <!-- material datetimepicker css -->
     <link rel="stylesheet" href="{{asset('assets/plugins/material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}">
+
+
+    <style>       
+
+        .form-control:focus{
+            border-color:#007E33;
+            box-shadow:0 0 0 0.2rem rgba(0, 126, 51, 0.25);
+        }
+    </style>
 
     @stack('css')
 
@@ -39,7 +48,7 @@
             <div class="navbar-brand header-logo">
                 <a href="index.html" class="b-brand">
                     <div class="b-bg">
-                        <i class="feather icon-trending-up"></i>
+                        <img src="{{asset('assets/images/logos/cobaep-dark.png')}}" alt="cobaep" style="width:24px; height:32px;" srcset="">
                     </div>
                     <span class="b-title">COBAEP</span>
                 </a>

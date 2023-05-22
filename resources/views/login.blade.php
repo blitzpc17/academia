@@ -34,7 +34,7 @@
             border:none;
         }
 
-        .auth-content .card input:focus{
+        .form-control:focus{
             border-color:#007E33;
             box-shadow:0 0 0 0.2rem rgba(0, 126, 51, 0.25);
         }
