@@ -7,6 +7,7 @@ use App\Http\Controllers\EstudiantesController as Estudiantes;
 use App\Http\Controllers\DocentesController as docentes;
 use App\Http\Controllers\UsuariosController as usuarios;
 use App\Http\Controllers\MateriasController as materias;
+use App\Http\Controllers\AsignacionController as asignacion;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MainController;
 /*
@@ -58,4 +59,13 @@ Route::get('materias/listar', [materias::class, 'Listar'])->name('materias.lista
 Route::post('materias/save', [materias::class, 'Save'])->name('materias.save');
 Route::get('materias/obtener', [materias::class, 'Obtener'])->name('materias.obtener');
 Route::get('materias/baja', [materias::class, 'Baja'])->name('materias.baja');
+
+
+
+Route::get('asignacion', [asignacion::class, 'Index'])->name('asignacion');
+Route::get('asignacion/listar', [asignacion::class, 'Listar'])->name('asignacion.listar');
+Route::post('asignacion/save', [asignacion::class, 'Save'])->name('asignacion.save');
+Route::get('asignacion/obtener', [asignacion::class, 'Obtener'])->name('asignacion.obtener');
+Route::get('asignacion/baja', [asignacion::class, 'Eliminar'])->name('asignacion.eliminar');
+Route::get('asignacion/docentes/listar', [asignacion::class, 'ListarMateriasDocentes'])->name('asignacion.docentes.listar');
 
