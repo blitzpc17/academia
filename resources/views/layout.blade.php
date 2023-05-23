@@ -360,7 +360,7 @@
                         <a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="icon feather icon-bell"></i></a>
                         <div class="dropdown-menu dropdown-menu-right notification">
                             <div class="noti-head">
-                                <h6 class="d-inline-block m-b-0">Notifications</h6>
+                                <h6 class="d-inline-block m-b-0">Notificaciones</h6>
                                 <div class="float-right">
                                     <a href="#!" class="m-r-10">mark as read</a>
                                     <a href="#!">clear all</a>
@@ -402,7 +402,7 @@
                                 </li>
                             </ul>
                             <div class="noti-footer">
-                                <a href="#!">show all</a>
+                                <a href="#!">Mostrar todo</a>
                             </div>
                         </div>
                     </div>
@@ -415,16 +415,13 @@
                         <div class="dropdown-menu dropdown-menu-right profile-notification">
                             <div class="pro-head">
                                 <img src="assets/images/user/avatar-1.jpg" class="img-radius" alt="User-Profile-Image">
-                                <span>John Doe</span>
+                                <span>{{$cuenta->nombre}}</span>
                                 <a href="auth-signin.html" class="dud-logout" title="Logout">
                                     <i class="feather icon-log-out"></i>
                                 </a>
                             </div>
-                            <ul class="pro-body">
-                                <li><a href="#!" class="dropdown-item"><i class="feather icon-settings"></i> Settings</a></li>
-                                <li><a href="#!" class="dropdown-item"><i class="feather icon-user"></i> Profile</a></li>
-                                <li><a href="message.html" class="dropdown-item"><i class="feather icon-mail"></i> My Messages</a></li>
-                                <li><a href="auth-signin.html" class="dropdown-item"><i class="feather icon-lock"></i> Lock Screen</a></li>
+                            <ul class="pro-body">                             
+                                <li><a href="{{route('us.logout')}}" class="dropdown-item"><i class="feather icon-lock"></i> Cerrar sesión</a></li>
                             </ul>
                         </div>
                     </div>

@@ -50,14 +50,17 @@
                     <div class="mb-4">
                         <img src="{{asset('assets/images/logos/cobaep-logo.png')}}" alt="cobaep" srcset="">
                     </div>
-                    <h3 class="mb-4">Iniciar sesión</h3>                   
-                    <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Correo Electronico">
-                    </div>
-                    <div class="input-group mb-4">
-                        <input type="password" class="form-control" placeholder="Contraseña">
-                    </div>
-                    <button class="btn btn-primary shadow-2 mb-4">Acceder</button>
+                    <h3 class="mb-4">Iniciar sesión</h3>    
+                    <form action="{{route('us.auth')}}" method="post">
+                        @csrf               
+                        <div class="input-group mb-3">
+                            <input type="email" name="email" class="form-control" placeholder="Correo Electronico">
+                        </div>
+                        <div class="input-group mb-4">
+                            <input  name="password" type="password" class="form-control" placeholder="Contraseña">
+                        </div>
+                        <button type="submit" class="btn btn-primary shadow-2 mb-4">Acceder</button>
+                    </form>
                 </div>
             </div>
         </div>

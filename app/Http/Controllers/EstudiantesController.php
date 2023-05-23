@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Estudiante;
 use App\Models\Personas;
+use Auth;
+use App\Models\User;
 
 class EstudiantesController extends Controller
 {
     public function Index(Request $r){
-        return view('Admin.estudiantes_registros');
+        $user = Auth::user();
+        $cuenta = json_decode(User::ObtenerCuentaData($user->id));
+        return view('Admin.estudiantes_registros', compact('cuenta'));
     }
 
     public function Save(Request $r){
