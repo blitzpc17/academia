@@ -6,6 +6,7 @@ use App\Http\Controllers\PersonasController as Personas;
 use App\Http\Controllers\EstudiantesController as Estudiantes;
 use App\Http\Controllers\DocentesController as docentes;
 use App\Http\Controllers\UsuariosController as usuarios;
+use App\Http\Controllers\MateriasController as materias;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MainController;
 /*
@@ -50,4 +51,11 @@ Route::get('usuarios/listar', [usuarios::class, 'Listar'])->name('usuarios.lista
 Route::post('usuarios/save', [usuarios::class, 'Save'])->name('usuarios.save');
 Route::get('usuarios/obtener', [usuarios::class, 'Obtener'])->name('usuarios.obtener');
 Route::get('usuarios/baja', [usuarios::class, 'Baja'])->name('usuarios.baja');
+
+
+Route::get('materias', [materias::class, 'Index'])->name('materias');
+Route::get('materias/listar', [materias::class, 'Listar'])->name('materias.listar');
+Route::post('materias/save', [materias::class, 'Save'])->name('materias.save');
+Route::get('materias/obtener', [materias::class, 'Obtener'])->name('materias.obtener');
+Route::get('materias/baja', [materias::class, 'Baja'])->name('materias.baja');
 
