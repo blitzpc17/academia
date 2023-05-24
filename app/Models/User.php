@@ -54,7 +54,7 @@ class User extends Authenticatable
         $data = DB::table('personas as per')
         ->join('users as us', 'per.Id', 'us.personasId')
         ->where('us.id', $id)
-        ->select('us.id', DB::raw("CONCAT(per.nombres, ' ', per.apellidos) as nombre"), 
+        ->select('us.id', DB::raw("CONCAT(per.nombres, ' ', per.apellidos) as nombre"), 'us.personasId',
         DB::raw("CASE WHEN us.tipo='E' THEN 'ESTUDIANTE' ELSE (CASE WHEN us.tipo='D' THEN 'DOCENTE' ELSE 'ADMIN' END ) END as nombreTipo "))
         ->first();
 

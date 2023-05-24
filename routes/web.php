@@ -7,9 +7,11 @@ use App\Http\Controllers\EstudiantesController as Estudiantes;
 use App\Http\Controllers\DocentesController as docentes;
 use App\Http\Controllers\UsuariosController as usuarios;
 use App\Http\Controllers\MateriasController as materias;
+use App\Http\Controllers\TiposController as tipo;
 use App\Http\Controllers\AsignacionController as asignacion;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\ActividadesDocentesController as actividadesdoc;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -69,3 +71,14 @@ Route::get('asignacion/obtener', [asignacion::class, 'Obtener'])->name('asignaci
 Route::get('asignacion/baja', [asignacion::class, 'Eliminar'])->name('asignacion.eliminar');
 Route::get('asignacion/docentes/listar', [asignacion::class, 'ListarMateriasDocentes'])->name('asignacion.docentes.listar');
 
+
+Route::get('tipo', [tipo::class, 'Index'])->name('tipo');
+Route::get('tipo/listar', [tipo::class, 'Listar'])->name('tipo.listar');
+Route::post('tipo/save', [tipo::class, 'Save'])->name('tipo.save');
+Route::get('tipo/obtener', [tipo::class, 'Obtener'])->name('tipo.obtener');
+Route::get('tipo/baja', [tipo::class, 'Baja'])->name('tipo.baja');
+
+Route::get('actividadesdoc', [actividadesdoc::class, 'Index'])->name('actividadesdoc');
+Route::get('actividadesdoc/listar', [actividadesdoc::class, 'Listar'])->name('actividadesdoc.listar');
+Route::post('actividadesdoc/save', [actividadesdoc::class, 'Save'])->name('actividadesdoc.save');
+Route::get('actividadesdoc/obtener', [actividadesdoc::class, 'Obtener'])->name('actividadesdoc.obtener');

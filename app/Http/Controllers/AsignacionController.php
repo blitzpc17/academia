@@ -54,33 +54,15 @@ class AsignacionController extends Controller
 
     public function Listar(Request $r){
         if($r->tipo=="E"){
-            return DB::table('estudiantes_materias as es')
-                        ->JOIN('docentes_materias as dm', 'es.docentesMateriasId', 'dm.id')
-                        ->JOIN('personas as per', 'dm.docentesId', 'per.Id')
-                        ->JOIN('docentes as doc','per.id','doc.id')
-                        ->JOIN('materias as mat', 'dm.materiasId', 'mat.id')
-                        ->WHERE('es.estudiantesId', $r->id)
-                        ->select(DB::raw("CONCAT(mat.nombre, ' - ', per.nombres, ' ', per.apellidos) as nombre"), 'dm.id')
-                        ->get();
+            return AsignacionEstudiantes::ListasMateriasXEstudiante($r->id);
         }else{
-            return DB::table('personas as per')
-                    ->JOIN('docentes as doc','per.id','doc.id')
-                    ->JOIN('docentes_materias as dm', 'doc.id', 'dm.docentesId')
-                    ->JOIN('materias as mat', 'dm.materiasId', 'mat.id')
-                    ->SELECT(DB::raw("CONCAT(mat.nombre, ' - ', per.nombres, ' ', per.apellidos) as nombre"), 'dm.id')
-                    ->WHERE('per.id', $r->id)
-                    ->get();
+           return AsignacionDocentes::ListarMateriasXDocente($r->id);
         }
     }
 
     public function ListarMateriasDocentes(Request $r){
-        return DB::table('personas as per')
-        ->JOIN('docentes as doc','per.id','doc.id')
-        ->JOIN('docentes_materias as dm', 'doc.id', 'dm.docentesId')
-        ->JOIN('materias as mat', 'dm.materiasId', 'mat.id')
-        ->select(DB::raw("CONCAT(mat.nombre, ' - ', per.nombres, ' ', per.apellidos) as nombre"), 'dm.id')
-        ->get();
-    }
+        return AsignacionDocentes::ListarMateriasDocentes();
+    }    
   
 
     public function Eliminar(Request $r){
