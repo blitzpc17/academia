@@ -38,6 +38,13 @@
             border-color:#007E33;
             box-shadow:0 0 0 0.2rem rgba(0, 126, 51, 0.25);
         }
+
+        span{
+            display:block;
+            width:100%;
+            color:red;
+        }
+
     </style>
 
 </head>
@@ -54,11 +61,17 @@
                     <form action="{{route('us.auth')}}" method="post">
                         @csrf               
                         <div class="input-group mb-3">
-                            <input type="email" name="email" class="form-control" placeholder="Correo Electronico">
+                            <input type="email" name="email" class="form-control" value="{{old('email')}}" placeholder="Correo Electronico">
                         </div>
+                        @error('email') 
+                            <span style="margin-top:-0.85rem;">{{$errors->first('email')}}</span>
+                        @enderror
                         <div class="input-group mb-4">
-                            <input  name="password" type="password" class="form-control" placeholder="Contraseña">
+                            <input  name="password" type="password" class="form-control" value="{{old('password')}}" placeholder="Contraseña">
                         </div>
+                        @error('password') 
+                            <span style="margin-top:-1.35rem;">{{$errors->first('password')}}</span>
+                        @enderror
                         <button type="submit" class="btn btn-primary shadow-2 mb-4">Acceder</button>
                     </form>
                 </div>

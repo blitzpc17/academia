@@ -8,6 +8,11 @@ use \App\Models\User;
 
 class MainController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function Index(){
         $user = Auth::user();
         $cuenta = json_decode(User::ObtenerCuentaData($user->id));

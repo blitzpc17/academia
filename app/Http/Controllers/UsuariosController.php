@@ -10,6 +10,11 @@ use Auth;
 
 class UsuariosController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function Index(Request $r){
         $user = Auth::user();
         $cuenta = json_decode(User::ObtenerCuentaData($user->id));

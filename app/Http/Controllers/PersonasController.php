@@ -7,6 +7,11 @@ use DB;
 
 class PersonasController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function Listar(Request $r){
         $tipo = $r->tipo;
         if($tipo == "E"){
