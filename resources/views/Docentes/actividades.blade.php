@@ -214,7 +214,7 @@
         data.append('fechaInicio', fechaInicio)       
         data.append('fechaEntrega', fechaEntrega)
         data.append('estado', $('#estado').val())
-        data.append('material', $('#material')[0].files)
+        data.append('material', $('#material')[0].files[0])
         data.append('id', $('#id').val())
         data.append('op', $('#op').val())
         
