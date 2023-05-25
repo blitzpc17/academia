@@ -103,14 +103,13 @@
                             <div class="acciones">
                                 @if($item->tipoActividadesId==1 && $item->estadoId == 1)
                                     <button onclick="subir({{$item->id}})" class="btn btn-icon btn-primary"><i class="feather icon-upload"></i></button>  
-                                @elseif($item->estadoEntregaId==null && $item->estadoId == 1)
+                                @elseif($item->tipoActividadesId==2 && $item->estadoId == 1 && $item->estadoEntregaId==null)
                                     <a href="{{route('actividadesest.examen')}}?id={{$item->id}}" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>  
                                 @else
-                                <div style="width:100%; display:flex; align-items:center; justify-content:center; padding: 0.25rem; flex-direction: column;">
-                                    <p style="color:red;">Entrega cerrada</p>
-                                    <p style="color:blue">Calificación: {{$item->calificacion}}</p>
-                                </div>
-                              
+                                    <div style="width:100%; display:flex; align-items:center; justify-content:center; padding: 0.25rem; flex-direction: column;">
+                                        <p style="color:red;">Entrega cerrada</p>
+                                        <p style="color:blue">Calificación: <br>{{$item->calificacion??"Sin calificar"}}</p>
+                                    </div>                              
                                 @endif
                             </div>
                             <div class="datos-detalle">

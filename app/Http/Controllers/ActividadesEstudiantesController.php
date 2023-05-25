@@ -22,6 +22,7 @@ class ActividadesEstudiantesController extends Controller
         $user = Auth::user();
         $cuenta = json_decode(User::ObtenerCuentaData($user->id));     
         $actividades = ActividadesDocentes::ListarActividadesMateriasXEstudiante($cuenta->personasId);
+        //dd($actividades);
         return view('Estudiantes.monitoreo_actividades', compact('cuenta', 'actividades'));
     }
 
