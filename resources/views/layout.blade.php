@@ -52,7 +52,7 @@
                     </div>
                     <span class="b-title">COBAEP</span>
                 </a>
-                <a class="mobile-menu" id="mobile-collapse" href="{{route('admin.index')}}"><span></span></a>
+                <a class="mobile-menu" id="mobile-collapse" href="!#"><span></span></a>
             </div>
             <div class="navbar-content scroll-div">
                 <ul class="nav pcoded-inner-navbar">
