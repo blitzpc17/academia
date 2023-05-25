@@ -94,8 +94,10 @@ Route::prefix('docentes')->group(function(){
 
 Route::prefix('estudiantes')->group(function(){   
 
-    Route::get('actividadesest', [actividadesest::class, 'Index'])->name('actividadesest')->middleware('estudiante');;
+    Route::get('actividadesest', [actividadesest::class, 'Index'])->name('actividadesest')->middleware('estudiante');
     Route::get('actividadesest/listar', [actividadesest::class, 'Listar'])->name('actividadesest.listar');
     Route::post('actividadesest/save', [actividadesest::class, 'Save'])->name('actividadesest.save');
     Route::get('actividadesest/obtener', [actividadesest::class, 'Obtener'])->name('actividadesest.obtener');
+    Route::get('actividadesest/examen', [actividadesest::class, 'Examenes'])->name('actividadesest.examen')->middleware('estudiante');
+    Route::post('actividadesest/examen/save', [actividadesest::class, 'ExamenesSend'])->name('actividadesest.examen.save');
 });

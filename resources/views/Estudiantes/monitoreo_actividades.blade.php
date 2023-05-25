@@ -101,7 +101,11 @@
                                 <p>{{$item->descripcion}}</p>                                                     
                             </div>
                             <div class="acciones">
-                                <button onclick="subir({{$item->id}})" class="btn btn-icon btn-primary"><i class="feather icon-upload"></i></button>                           
+                                @if($item->tipoActividadesId==1)
+                                    <button onclick="subir({{$item->id}})" class="btn btn-icon btn-primary"><i class="feather icon-upload"></i></button>  
+                                @else
+                                    <a href="{{route('actividadesest.examen')}}?id={{$item->id}}" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>  
+                                @endif
                             </div>
                             <div class="datos-detalle">
                                 <p><span>Materia:</span> {{$item->materia}}</p>                               

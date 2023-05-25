@@ -108,9 +108,7 @@
                         <div class="form-group">
                             <label for="">Descripción</label>
                             <textarea name="descripcion" id="descripcion" class="form-control" cols="30" rows="10"></textarea>
-                        </div>
-
-                        
+                        </div>                        
 
                         <div class="form-row">
                             <div class="form-group col-sm-12 col-md-6">
@@ -130,6 +128,33 @@
                         <div style="width: 100%" id="archivo">
                                                   
                         </div>
+
+
+                        <!-- Examen -->
+                        <div id="frm-examen" style="width:100%">
+
+                            <h3>Formulario de examen</h3>
+                            <hr>
+                            
+                                @for ($i=1; $i<=10; $i++)
+                                    <div class="row">
+                                        <div class="form-group col-sm-6">
+                                            <label for="">Pregunta</label>
+                                            <input type="text"
+                                                class="form-control" name="preg-{{$i}}" id="preg-{{$i}}" aria-describedby="helpId" placeholder="">
+                                        </div>
+
+                                        <div class="form-group col-sm-6">
+                                            <label for="">Respuesta</label>
+                                            <input type="text"
+                                                class="form-control" name="res-{{$i}}" id="res-{{$i}}" aria-describedby="helpId" placeholder="">
+                                        </div>
+                                    </div>
+                                @endfor
+                                <hr>
+                        </div>
+
+                        <!-- end examen-->
 
                         <div class="form-group">
                             <label for="">Estado</label>
@@ -193,6 +218,14 @@
 
         });
 
+        $('#tipo').on('change', function(){
+            if($(this).val()==2){ //tipo examen
+                $('#frm-examen').show();
+            }else{
+                $('#frm-examen').hide();
+            }
+        })
+
     });
 
     function nuevo(){
@@ -221,7 +254,16 @@
         data.append('id', $('#id').val())
         data.append('op', $('#op').val())
 
-        
+        if($('#tipo').val()==2)//es examen
+        {
+            let examen=[];
+            for(let i = 1; i<=10; i++){
+                if($('#preg-'+i).val()==null|| $('#preg-'+i).val()=="")continue;
+
+                examen.push({"id":i,"pregunta": $('#preg-'+i).val(), "respuesta": $("#res-"+i).val()})
+            }
+            data.append('examen', JSON.stringify(examen))
+        }
 
         $.ajax({
             method: "POST",
@@ -308,12 +350,24 @@
         $('#estado').val(obj.estadoId)
         $('#id').val(obj.id)
         $('#op').val('U')
+console.log(obj)
+        //set examen frm-examen
+        if(obj.tipoActividadesId==2){
+            let dataExamen = JSON.parse(obj.examen);
+            $.each(dataExamen, function (i, val) { 
+                $('#preg-'+val.id).val(val.pregunta)
+                $('#res-'+val.id).val(val.respuesta)
+                $('#tipo').change();
+            });
+            
+        }
 
         $('#md-registro').modal('toggle')
     }
 
     function SetMaterial(nombre){
         $('#archivo').empty();
+        if(nombre==null)return;
         const html = `<div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
                                 <a download="${nombre}" href="{{asset('actividades/docentes/materialapoyo')}}/${nombre}" style="width:32px: height:32px;" class="btn btn-icon btn-primary"><i class="fas fa-file"></i></a>
                                 <p>${nombre}</p>
@@ -332,6 +386,15 @@
         $('#estado').val(null)
         $('#id').val(null)
         $('#op').val(null)
+
+        for(let i = 1; i<=10; i++){
+            $('#preg-'+i).val(null)
+            $('#res-'+i).val(null)
+        }
+
+        $('#frm-examen').hide();
+
+
     }
 
   

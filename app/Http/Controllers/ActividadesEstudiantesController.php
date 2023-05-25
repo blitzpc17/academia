@@ -22,7 +22,6 @@ class ActividadesEstudiantesController extends Controller
         $user = Auth::user();
         $cuenta = json_decode(User::ObtenerCuentaData($user->id));     
         $actividades = ActividadesDocentes::ListarActividadesMateriasXEstudiante($cuenta->personasId);
-      //  dd($actividades);
         return view('Estudiantes.monitoreo_actividades', compact('cuenta', 'actividades'));
     }
 
@@ -51,6 +50,40 @@ class ActividadesEstudiantesController extends Controller
         }
 
         return response()->json(["code"=>200, "msj"=>"Actividad subida correctamente"]);
+    }
+
+    public function Examenes(Request $r){
+        $user = Auth::user();
+        $cuenta = json_decode(User::ObtenerCuentaData($user->id));     
+        $examen = DB::table('materias_actividades as ma')
+            ->join('tipo_actividades as ta', 'ma.tipoActividadesId', 'ta.id')
+            ->join('docentes_materias as dm', 'ma.docentesMateriasId', 'dm.materiasId')
+            ->where('ma.id', $r->id)
+            ->select('ma.id', 'ma.titulo', 'ma.descripcion', 'ma.examen')
+            ->first();
+        $preguntas = json_decode($examen->examen);
+        return view('Estudiantes.examen', compact('cuenta', 'examen', 'preguntas'));
+    }
+
+    public function ExamenesSend(Request $r){
+
+        $fecha= date('Y-m-d H:i:s');
+
+
+        $data = array(
+            'estudiantesId'=>$r->estudiante,
+            'materiasActividadesId'=>$r->id,
+            'estado'=>1,
+            'productoEstudiante'=>null,
+            'fechaEntrega'=>$fecha,
+            'ultimaModificacion' => $fecha,
+            'vecesModificado' => 1
+        );
+      
+       ActividadesEstudiantes::create($data);
+
+       return response()->json(["code"=>200, "msj"=>"Tus respuestas han sido enviadas."]);
+
     }
     
 }
