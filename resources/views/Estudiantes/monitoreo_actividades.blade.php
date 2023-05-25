@@ -19,77 +19,52 @@
     .actividades .item{
         height:250px;
         display:flex;
+        flex-wrap: wrap;
         background:white;
         border: 1px solid #ddd;
         border-radius:10px;
         padding:1rem;        
     }
 
-    .actividades .item .detalle{
-        width:65%;
-        height:100%;
-        display:flex;
-        flex-direction:column;
-    }
-
-
-
     .actividades .item .detalle h3{
-        font-weight:700;
-    }
-
-    .actividades .item .detalle p{
-        color:#999;
+        color:#007E33;
         font-weight:600;
     }
-
-
-    .actividades .item .detalle .datos-actividad, 
-    .actividades .item .detalle .datos-detalle
-    {
-        width:100%;
-        height:180px;
-    }
-
-
-    .actividades .item .detalle .datos-detalle{
-        display:flex; 
-        flex-wrap: wrap;  
-        height:70px;     
-    }
-    .actividades .item .detalle .datos-detalle p{
-        width:50%;
-        color:#999;  
-        font-weight:700;        
-    }
-    .actividades .item .detalle .datos-detalle p span{
-        color:black;
-          
+    .actividades .item .detalle{
+        width:85%;
+        height:135px;
+        display:flex;
+        flex-direction:column;
     }
 
     .actividades .item .acciones{
-        width:35%;
-        height:100%;
+        width:15%;
         display:flex;
-        flex-direction:column;
-        justify-content:center;
         align-items:center;
+        justify-content:center;
+        border-left: 1px solid #007E33;
     }
 
-    .actividades .item .acciones .datos-detalle{
-        height:70px;
-        display:flex; 
-        flex-direction:column;
-        margin-top: 70px;
+    .actividades .item .datos-detalle{
+        width:100%;
+        height:85px;
+        display:flex;      
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
     }
-    .actividades .item .acciones .datos-detalle p{
-        color:#999;  
+
+    .actividades .item .datos-detalle span{    
+        color:#757575;
         font-weight:700;
-        margin-bottom:0;        
     }
 
-    .actividades .item .acciones .datos-detalle span{
-        color:black;          
+    .actividades .item .datos-detalle p{ 
+        width:33%;      
+        color:#a1887f;
+        font-weight:700;
+        margin:0;
     }
 
 
@@ -119,30 +94,33 @@
 
                 <div class="actividades">
 
-                    <div class="item">
-                        <div class="detalle">
-                            <div class="datos-actividad">
-                                <h3>titulo</h3>
-                                <p>Descripcion</p>
+                    @foreach ($actividades as $item)
+                        <div class="item">                        
+                            <div class="detalle">
+                            <h3>{{$item->titulo}}</h3>
+                                <p>{{$item->descripcion}}</p>                                                     
+                            </div>
+                            <div class="acciones">
+                                <button onclick="subir({{$item->id}})" class="btn btn-icon btn-primary"><i class="feather icon-upload"></i></button>                           
                             </div>
                             <div class="datos-detalle">
-                                <p><span>Materia:</span> 20-05-2023 03:31</p>                               
-                                <p><span>Fecha Publicación:</span> 20-05-2023 03:31</p>
-                                <p><span>Fecha Limite Entrega:</span> 20-05-2023 03:31</p>
-                                <p><span>Estado:</span>Pendiente</p>
-                                <p><span>Fecha Subida:</span> 20-05-2023 03:31</p>
-                                <p><span>Calificación:</span> 20-05-2023 03:31</p>
-                            </div>
+                                <p><span>Materia:</span> {{$item->materia}}</p>                               
+                                <p><span>Fech. Publicación:</span> {{date_format(date_create($item->fechaInicio),"d-m-Y H:i")}} hrs</p>
+                                <p><span>Tipo actividad:</span> {{$item->tipo}}</p>
+                                <p><span>Estado:</span> {{$item->estadoEntrega}}</p>
+                                <p><span>Fech. Lim. Entrega:</span> {{date_format(date_create($item->fechaEntrega),"d-m-Y H:i")}} hrs</p>  
+                                <p><span>Material Adjunto:
+                                    @if($item->materialAdjunto!=null)
+                                    <a class="btn btn-icon btn-info" href="{{asset('actividades/docentes/materialapoyo')}}/{{$item->materialAdjunto}}"><i class="fas fa-file"></i></a>
+                                    @else
+                                    <span></span>
+                                    @endif
+                                </p>
+                            </div> 
                         </div>
-                        <div class="acciones">
-                            <button class="btn btn-icon btn-primary"><i class="feather icon-upload"></i></button>                           
-                        </div>
-                        
+                    @endforeach
 
-                    </div>
-
-
-
+                    
 
                 </div>
 
@@ -179,18 +157,21 @@
                 <div class="container-fluid">
 
                     <form id="frm-registro" enctype="multipart/form-data">
-                        <input id="op" type="hidden" name="op">
                         <input id="id" type="hidden" name="id">
-
-                                    
-                        
-                  
-
+                        <input id="estudianteid" type="hidden" name="estudianteid" value="{{$cuenta->personasId}}">
+                        <div class="form-group">
+                            <label for="">Adjuntar archivo</label>
+                            <input class="form-control" type="file" id="material" name="material">
+                        </div>     
+                        <div class="form-group">
+                          <label for="">Comentarios</label>
+                          <textarea class="form-control" name="observaciones" id="observaciones" rows="5"></textarea>
+                        </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="submit" class="btn btn-primary">Subir</button>
 </form>
             </div>
         </div>
@@ -212,23 +193,7 @@
    
 
     $(document).ready(function () {
-        console.log("running....")
-        listar();
-
-
-
-        $('#fechaInicio').bootstrapMaterialDatePicker({
-            format: 'DD-MM-YYYY h:mm:ss a',
-            time:true,
-        }).on('change', function(e, date){
-            $('#fechaEntrega').bootstrapMaterialDatePicker('setMinDate', date)
-        })
-
-        $('#fechaEntrega').bootstrapMaterialDatePicker({
-            format: 'DD-MM-YYYY h:mm:ss a',
-            time:true,
-        });
-
+        console.log("running....")    
 
         $('#frm-registro').on('submit', function (e) {
              e.preventDefault();
@@ -238,47 +203,34 @@
 
     });
 
-    function nuevo(){
+    function subir(id){
         LimpiarFormulario();
-        $('.modal-title').text('Nuevo Registro')
-        $('#op').val('I')
-        $('#id').val(null)
+        $('.modal-title').text('Subir actividad')       
+        $('#id').val(id)
         $('#md-registro').modal('toggle')
     }
 
-    function save(op){
-        let fechaInicio = $('#fechaInicio').val()
-        fechaInicio = moment(fechaInicio, "DD-MM-YYYY hh:mm:ss").format("YYYY-MM-DD hh:mm:ss") 
-        let fechaEntrega = $('#fechaEntrega').val()
-        fechaEntrega = moment(fechaEntrega, "DD-MM-YYYY hh:mm:ss").format("YYYY-MM-DD hh:mm:ss") 
+    function save(op){     
 
         let data = new FormData();
-        data.append('docenteMateria', $('#docenteMateria').val())
-        data.append('tipo', $('#tipo').val())        
-        data.append('titulo', $('#titulo').val())
-        data.append('descripcion', $('#descripcion').val())
-        data.append('fechaInicio', fechaInicio)       
-        data.append('fechaEntrega', fechaEntrega)
-        data.append('estado', $('#estado').val())
+        data.append('estudiante', $('#estudianteid').val())
+        data.append('observaciones', $('#observaciones').val())
         data.append('material', $('#material')[0].files[0]==undefined?"": $('#material')[0].files[0])
         data.append('id', $('#id').val())
-        data.append('op', $('#op').val())
 
         
 
         $.ajax({
             method: "POST",
-            url: "{{route('actividadesdoc.save')}}",
+            url: "{{route('actividadesest.save')}}",
             data: data,
             contentType: false,
             cache: false,
             processData: false,
             success: function (res) {
                 if(res.code==200){
-                    swal("Aviso", res.msj, "success").then(()=>{
-                        listar()
-                        LimpiarFormulario();
-                        $('#md-registro').modal('toggle')
+                    swal("Aviso", res.msj, "success").then(()=>{  
+                        window.location.replace("{{route('actividadesest')}}");
                     });
                   
                 }else{
@@ -287,94 +239,12 @@
             }
         });
 
-    }
-
-    function listar(){
-        let data =  {"id":"{{$cuenta->personasId}}"}
-        $.ajax({
-            method: "GET",
-            url: "{{route('actividadesdoc.listar')}}",
-            data: data,
-            dataType: "json",
-            success: function (res) {
-                if(tabla!=null||tabla!=undefined){
-                    tabla.destroy()                    
-                }
-                $('#tb-registros tbody').empty()
-                let html=''
-                $.each(res, function (i, val) { 
-                     html+=`<tr>
-                                <td>${i+1}</td>
-                                <td>${val.titulo}</td>
-                                <td>${val.tipo}</td>
-                                <td>${val.estado}</td>
-                                <td>
-                                    <button onclick="Editar(${val.id})" class="btn btn-icon btn-warning"><i class="fas fa-edit"></i></button>                                
-                                    <button onclick="Baja(${val.id},'D', ${val.baja?"0":"1"})" class="btn btn-icon btn-${val.baja?"primary":"danger"}"><i class="fas fa-thumbs-${val.baja?"up":"down"}"></i></button>
-                                </td>
-                            </tr>`
-                });
-                $('#tb-registros tbody').html(html)
-
-              
-
-                tabla = $('#tb-registros').DataTable()
-
-            }
-        });
-
-    }
-
-    function Editar(id){
-        $.ajax({
-            method: "GET",
-            url: "{{route('actividadesdoc.obtener')}}",
-            data: {"id":id},
-            dataType: "json",
-            success: function (res) {
-                SetDatos(res);
-            }
-        });
-    }
-
-    function SetDatos(obj){
-        LimpiarFormulario();
-        $('.modal-title').text('Modificación de la actividad')
-        $('#docenteMateria').val(obj.materiasId)
-        $('#titulo').val(obj.titulo)
-        $('#tipo').val(obj.tipoActividadesId)
-        $('#fechaInicio').val(moment(new Date(obj.fechaInicio)).format("YYYY-MM-DD hh:mm:ss"))
-        $('#fechaEntrega').val(moment(new Date(obj.fechaEntrega)).format("YYYY-MM-DD hh:mm:ss"))
-        $('#descripcion').val(obj.descripcion)
-        $('#titulo').val(obj.titulo)
-        SetMaterial(obj.materialAdjunto);
-        $('#estado').val(obj.estadoId)
-        $('#id').val(obj.id)
-        $('#op').val('U')
-
-        $('#md-registro').modal('toggle')
-    }
-
-    function SetMaterial(nombre){
-        $('#archivo').empty();
-        const html = `<div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
-                                <a download="${nombre}" href="{{asset('actividades/docentes/materialapoyo')}}/${nombre}" style="width:32px: height:32px;" class="btn btn-icon btn-primary"><i class="fas fa-file"></i></a>
-                                <p>${nombre}</p>
-                            </div>`;
-        $('#archivo').append(html);
-    }
+    } 
 
     function LimpiarFormulario(){
-        $('#docenteMateria').val(null)
-        $('#tipo').val(null)
-        $('#titulo').val(null)
-        $('#descripcion').val(null)
-        $('#fechaInicio').val(null)
-        $('#fechaEntrega').val(null)
+        $('#observaciones').val(null)
         $('#material').val(null)
-        $('#estado').val(null)
         $('#id').val(null)
-        $('#op').val(null)
     }
 
   

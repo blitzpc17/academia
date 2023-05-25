@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Auth;
 use DB;
 use App\Models\User;
+use App\Models\ActividadesDocentes;
+use App\Models\ActividadesEstudiantes;
+use App\Models\Utilidades;
 
 
 class ActividadesEstudiantesController extends Controller
@@ -17,56 +20,37 @@ class ActividadesEstudiantesController extends Controller
     
     public function Index(){
         $user = Auth::user();
-        $cuenta = json_decode(User::ObtenerCuentaData($user->id));
-        $actividades = "";
+        $cuenta = json_decode(User::ObtenerCuentaData($user->id));     
+        $actividades = ActividadesDocentes::ListarActividadesMateriasXEstudiante($cuenta->personasId);
+      //  dd($actividades);
         return view('Estudiantes.monitoreo_actividades', compact('cuenta', 'actividades'));
     }
 
     public function Save(Request $r){
+        $fecha= date('Y-m-d H:i:s');
+        $dataActividad = ActividadesEstudiantes::where('id', $r->id)->first(); 
 
         $data = array(
-            'docentesMateriasId' => $r->docenteMateria,
-            'tipoActividadesId' => $r->tipo,
-            'titulo' => $r->titulo,
-            'descripcion' => $r->descripcion,
-            'fechaInicio' => $r->fechaInicio,
-            'fechaEntrega'  => $r->fechaEntrega,           
-            'examen' => $r->examen,
-            'estado' => $r->estado
+            'estudiantesId'=>$r->estudiante,
+            'materiasActividadesId'=>$r->id,
+            'estado'=>$dataActividad!=null?2:1,//entregado 1, resubido 2
+            'productoEstudiante'=>$r->observaciones,
+            'fechaEntrega'=>$fecha,
+            'ultimaModificacion' => $fecha,
+            'vecesModificado' => $dataActividad!=null?($dataActividad->vecesModificado + 1):1
         );
+
         if(isset($r->material) &&$r->material!=null){
-            $data = array_merge($data, ['materialAdjunto'  => Utilidades::SubirArchivos($r->material, 'actividades/docentes/materialapoyo')]);
+            $data = array_merge($data, ['materialAdjunto'  => Utilidades::SubirArchivos($r->material, 'actividades/estudiantes/productos')]);
         } 
 
-        if($r->op=='I'){
-            ActividadesDocentes::create($data);
+        if($dataActividad!=null){
+            ActividadesEstudiantes::where('id', $dataActividad->id)->update($data);           
         }else{
-            ActividadesDocentes::where('id', $r->id)->update($data);
+            ActividadesEstudiantes::create($data);
         }
 
-        return response()->json(["code"=>200, "msj"=>"Registro guardado correctamente"]);
+        return response()->json(["code"=>200, "msj"=>"Actividad subida correctamente"]);
     }
-
-    public function Listar(Request $r){
-        return DB::table('materias_actividades as ma')
-                ->join('tipo_actividades as ta', 'ma.tipoActividadesId', 'ta.id')
-                ->join('docentes_materias as dm', 'ma.docentesMateriasId', 'dm.materiasId')
-                ->join('materias as m', 'dm.materiasId', 'm.id')
-                ->where('dm.docentesId', $r->id)
-                ->select('ma.id', 'ma.titulo', 'ta.nombre as tipo', DB::raw("CASE WHEN ma.estado=1 THEN 'PROGRAMADA' ELSE (CASE WHEN ma.estado=2 THEN 'CERRADA' ELSE 'CANCELADA' END) END AS estado"))
-                ->get();
-    }
-
-    public function Obtener(Request $r){
-        $data = DB::table('materias_actividades as ma')
-            ->join('tipo_actividades as ta', 'ma.tipoActividadesId', 'ta.id')
-            ->join('docentes_materias as dm', 'ma.docentesMateriasId', 'dm.materiasId')
-            ->where('ma.id', $r->id)
-            ->select('ma.id', 'ma.tipoActividadesId', 'ma.titulo', 'ma.descripcion', 'ma.fechaInicio', 'ma.fechaEntrega', 
-            'ma.estado as estadoId', 'ma.examen', 'ma.materialAdjunto', 'ta.nombre as tipo', 'dm.id as materiasId',
-            DB::raw("CASE WHEN ma.estado=1 THEN 'PROGRAMADA' ELSE (CASE WHEN ma.estado=2 THEN 'CERRADA' ELSE 'CANCELADA' END) END AS estado"))
-            ->first();
-
-        return json_encode($data);
-    }
+    
 }
