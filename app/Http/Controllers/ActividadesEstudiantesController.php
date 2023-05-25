@@ -85,5 +85,14 @@ class ActividadesEstudiantesController extends Controller
        return response()->json(["code"=>200, "msj"=>"Tus respuestas han sido enviadas."]);
 
     }
+
+    public function Obtener(Request $r){
+        $data = DB::table('estudiantes_materias as em')
+                ->where('id', $r->id)
+                ->where('estudiantesId', $r->est)
+                ->first();
+
+        return json_encode($data);
+    }
     
 }

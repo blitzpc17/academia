@@ -39,7 +39,8 @@ class ActividadesDocentes extends Model
                     ->select('ma.id', 'ma.titulo', 'ma.descripcion', 'ma.fechaEntrega', 'ma.fechaInicio', 'm.nombre as materia',
                     DB::raw("CASE WHEN ma.estado = '1' THEN 'NUEVA' ELSE (CASE WHEN ma.estado='2' THEN 'CERRADA' ELSE 'CANCELADA' END) END as estado"),
                     DB::raw("CASE WHEN ma.tipoActividadesId  = '1' THEN 'TAREA' ELSE 'EXAMEN' END as tipo"), 'ma.tipoActividadesId', 'ma.materialAdjunto',
-                    DB::raw("CASE WHEN ea.estado = 1 THEN 'ENTREGADO' ELSE (CASE WHEN ea.estado is null THEN 'SIN ENTREGAR' ELSE 'RESUBIDO' END) END  as estadoEntrega"))
+                    DB::raw("CASE WHEN ea.estado = 1 THEN 'ENTREGADO' ELSE (CASE WHEN ea.estado is null THEN 'SIN ENTREGAR' ELSE 'RESUBIDO' END) END  as estadoEntrega"),
+                    'ea.estado as estadoEntregaId', 'ma.estado as estadoId')
                     ->get();
 
 

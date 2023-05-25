@@ -101,10 +101,12 @@
                                 <p>{{$item->descripcion}}</p>                                                     
                             </div>
                             <div class="acciones">
-                                @if($item->tipoActividadesId==1)
+                                @if($item->tipoActividadesId==1 && $item->estadoId == 1)
                                     <button onclick="subir({{$item->id}})" class="btn btn-icon btn-primary"><i class="feather icon-upload"></i></button>  
-                                @else
+                                @elseif($item->estadoEntregaId==null && $item->estado == 1)
                                     <a href="{{route('actividadesest.examen')}}?id={{$item->id}}" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>  
+                                @else
+                                <p style="color:red;">Entrega cerrada</p>
                                 @endif
                             </div>
                             <div class="datos-detalle">

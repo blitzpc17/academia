@@ -23,7 +23,7 @@ class ActividadesDocentesController extends Controller
         $user = Auth::user();
         $cuenta = json_decode(User::ObtenerCuentaData($user->id));
         $materias = AsignacionDocentes::ListarMateriasXDocente($user->personasId);
-        $tipos = Tipos::all();
+        $tipos = Tipos::all();        
         return view('Docentes.actividades', compact('cuenta', 'tipos', 'materias'));
     }
 
@@ -73,5 +73,17 @@ class ActividadesDocentesController extends Controller
             ->first();
 
         return json_encode($data);
+    }
+
+    public function AlumnosMatriculadosMateria(Request $r){
+        $query= "SELECT 
+                DISTINCT p.id, concat(p.nombres, ' ', p.apellidos ) as nombre
+                FROM estudiantes_materias em 
+                JOIN materias_actividades ma on em.docentesMateriasId = ma.docentesMateriasId 
+                JOIN personas p on em.estudiantesId = p.id
+                WHERE ma.id = {$r->id}";
+        $data = DB::select($query);
+
+        return $data;
     }
 }

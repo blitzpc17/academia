@@ -181,6 +181,59 @@
 
 
 
+<!-- modal revision-->
+
+<!-- Modal -->
+<div class="modal fade" id="md-revision" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title title-revision">sm</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+
+            
+            <form id="frm-revision">
+
+            <div class="form-group">
+              <label for="">Alumnos matrículados</label>
+              <select class="form-control" name="select-matriculados" id="select-matriculados"></select>
+            </div>
+
+            <div id="form-tarea">
+                <center>
+                    <iframe width="600" height="600" src="https://www.w3schools.com" title="archivos adjuntos"></iframe>
+                </center>  
+            </div>
+
+            <div id="form-examen">
+
+            
+            </div>
+
+            <div class="form-group">
+                <label for="">Calificación</label>
+                <input type="text"
+                    class="form-control" name="" id="" aria-describedby="helpId" placeholder="0">
+                </div>                
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- emnd modal revision-->
+
+
+
 
 @endsection
 
@@ -225,6 +278,10 @@
                 $('#frm-examen').hide();
             }
         })
+
+        $('#select-matriculados').on('change', function(){
+            CargarActividadRevision($(this).val())
+        });
 
     });
 
@@ -310,6 +367,7 @@
                                 <td>
                                     <button onclick="Editar(${val.id})" class="btn btn-icon btn-warning"><i class="fas fa-edit"></i></button>                                
                                     <button onclick="Baja(${val.id},'D', ${val.baja?"0":"1"})" class="btn btn-icon btn-${val.baja?"primary":"danger"}"><i class="fas fa-thumbs-${val.baja?"up":"down"}"></i></button>
+                                    <button onclick="Revisar(${val.id}, '${val.titulo}')" class="btn btn-icon btn-info"><i class="fas fa-clipboard-check"></i></button>
                                 </td>
                             </tr>`
                 });
@@ -350,7 +408,7 @@
         $('#estado').val(obj.estadoId)
         $('#id').val(obj.id)
         $('#op').val('U')
-console.log(obj)
+
         //set examen frm-examen
         if(obj.tipoActividadesId==2){
             let dataExamen = JSON.parse(obj.examen);
@@ -395,6 +453,35 @@ console.log(obj)
         $('#frm-examen').hide();
 
 
+    }
+
+
+    function Revisar(id, title){
+        $('.title-revision').text(title)
+        $('#md-revision').modal('toggle')
+    }
+
+    function CargarActividadRevision(id){
+
+        $.get("{{route('actividades.estudiantes')}}", {"id":id},
+            function (data) {
+
+                console.log(data)
+                
+            }
+        );
+
+
+        $.ajax({
+            method: "GET",
+            url: "{{route('actividadesest.obtener')}}",
+            data: {"id":id, "est":$('#select-matriculados').val()},
+            dataType: "json",
+            success: function (res) {
+                console.log(res)
+               
+            }
+        });      
     }
 
   

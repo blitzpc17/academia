@@ -89,6 +89,8 @@ Route::prefix('docentes')->group(function(){
     Route::get('actividadesdoc/listar', [actividadesdoc::class, 'Listar'])->name('actividadesdoc.listar');
     Route::post('actividadesdoc/save', [actividadesdoc::class, 'Save'])->name('actividadesdoc.save');
     Route::get('actividadesdoc/obtener', [actividadesdoc::class, 'Obtener'])->name('actividadesdoc.obtener');
+
+    Route::get('actividadesdoc/materia/estudiantes', [actividadesdoc::class, 'AlumnosMatriculadosMateria'])->name('actividades.estudiantes');
 });
 
 
