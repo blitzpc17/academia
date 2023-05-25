@@ -81,7 +81,8 @@ class ActividadesDocentesController extends Controller
                 FROM estudiantes_materias em 
                 JOIN materias_actividades ma on em.docentesMateriasId = ma.docentesMateriasId 
                 JOIN personas p on em.estudiantesId = p.id
-                WHERE ma.id = {$r->id}";
+                LEFT JOIN estudiantes_actividades ea on ma.id = ea.materiasActividadesId 
+                WHERE ma.id = {$r->id} AND ea.calificacion IS NULL";
         $data = DB::select($query);
 
         return $data;

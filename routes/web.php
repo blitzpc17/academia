@@ -102,4 +102,6 @@ Route::prefix('estudiantes')->group(function(){
     Route::get('actividadesest/obtener', [actividadesest::class, 'Obtener'])->name('actividadesest.obtener');
     Route::get('actividadesest/examen', [actividadesest::class, 'Examenes'])->name('actividadesest.examen')->middleware('estudiante');
     Route::post('actividadesest/examen/save', [actividadesest::class, 'ExamenesSend'])->name('actividadesest.examen.save');
+    Route::post('actividadesest/examen/calificar', [actividadesest::class, 'ActualizarCalificacionActividad'])->name('actividadesest.examen.calificar');
+    
 });

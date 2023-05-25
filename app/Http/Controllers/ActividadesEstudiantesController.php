@@ -74,7 +74,7 @@ class ActividadesEstudiantesController extends Controller
             'estudiantesId'=>$r->estudiante,
             'materiasActividadesId'=>$r->id,
             'estado'=>1,
-            'productoEstudiante'=>null,
+            'productoEstudiante'=>$r->examen,
             'fechaEntrega'=>$fecha,
             'ultimaModificacion' => $fecha,
             'vecesModificado' => 1
@@ -87,12 +87,21 @@ class ActividadesEstudiantesController extends Controller
     }
 
     public function Obtener(Request $r){
-        $data = DB::table('estudiantes_materias as em')
-                ->where('id', $r->id)
-                ->where('estudiantesId', $r->est)
+        $data = DB::table('estudiantes_actividades as ea')
+                ->join('materias_actividades as ma', 'ea.materiasActividadesId', 'ma.id')
+                ->where('ma.id', $r->id)
+                ->where('ea.estudiantesId', $r->est)
+                ->select('ea.id', 'ma.tipoActividadesId', 'ma.examen', 'ea.materialAdjunto', 'ea.productoEstudiante', 'ea.fechaEntrega', 'ea.vecesModificado')
                 ->first();
+            
 
-        return json_encode($data);
+        return response()->json(["data" => $data]);
+    }
+
+    public function ActualizarCalificacionActividad(Request $r){
+        $data = ["calificacion" => $r->calificacion];
+        ActividadesEstudiantes::where('id', $r->id)->update($data);
+        return response()->json(["code"=>200, "msj" => "Se ha registrado la calificación correctamente."]);
     }
     
 }

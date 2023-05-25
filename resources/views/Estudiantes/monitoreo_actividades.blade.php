@@ -106,7 +106,11 @@
                                 @elseif($item->estadoEntregaId==null && $item->estadoId == 1)
                                     <a href="{{route('actividadesest.examen')}}?id={{$item->id}}" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>  
                                 @else
-                                <p style="color:red;">Entrega cerrada</p>
+                                <div style="width:100%; display:flex; align-items:center; justify-content:center; padding: 0.25rem; flex-direction: column;">
+                                    <p style="color:red;">Entrega cerrada</p>
+                                    <p style="color:blue">Calificación: {{$item->calificacion}}</p>
+                                </div>
+                              
                                 @endif
                             </div>
                             <div class="datos-detalle">

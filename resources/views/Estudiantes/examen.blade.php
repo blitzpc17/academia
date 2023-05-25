@@ -106,11 +106,11 @@
 
         let examen=[];
             for(let i = 1; i<=10; i++){
-                if($('#preg-'+i).val()==null|| $('#preg-'+i).val()=="")continue;
+                if($('#res-'+i).val()==null|| $('#res'+i).val()=="")continue;
 
                 examen.push({"id":i,"pregunta": $('#preg-'+i).val(), "respuesta": $("#res-"+i).val()})
             }
-        data.append('examen', JSON.stringify(examen))
+            data.append('examen', JSON.stringify(examen))
 
         
 

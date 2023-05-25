@@ -197,7 +197,7 @@
 
             
             <form id="frm-revision">
-
+            <input type="hidden" id="idactest" name="idactest">
             <div class="form-group">
               <label for="">Alumnos matrículados</label>
               <select class="form-control" name="select-matriculados" id="select-matriculados"></select>
@@ -205,7 +205,7 @@
 
             <div id="form-tarea">
                 <center>
-                    <iframe width="600" height="600" src="https://www.w3schools.com" title="archivos adjuntos"></iframe>
+                    <iframe id="frameTareas" style="width:90%; height:600px;" src="https://www.w3schools.com" title="archivos adjuntos"></iframe>
                 </center>  
             </div>
 
@@ -217,7 +217,7 @@
             <div class="form-group">
                 <label for="">Calificación</label>
                 <input type="text"
-                    class="form-control" name="" id="" aria-describedby="helpId" placeholder="0">
+                    class="form-control" name="calificacion" id="calificacion" aria-describedby="helpId" placeholder="0">
                 </div>                
             </div>
 
@@ -244,7 +244,7 @@
 <script>
 
     let tabla;
-   
+    let actividadSeleccionada;
 
     $(document).ready(function () {
         console.log("running....")
@@ -280,7 +280,23 @@
         })
 
         $('#select-matriculados').on('change', function(){
-            CargarActividadRevision($(this).val())
+            CargarActividadRevision(actividadSeleccionada)
+        });
+
+        $('#frm-revision').on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{{route('actividadesest.examen.calificar')}}",
+                data: {"id":$('#idactest').val(), "calificacion":$('#calificacion').val()},
+                dataType: "json",
+                success: function (res) {
+                    swal("Aviso", res.msj, "success").then(()=>{
+                        $('#md-revision').modal('toggle')
+                    })
+                   
+                }
+            });
         });
 
     });
@@ -366,7 +382,6 @@
                                 <td>${val.estado}</td>
                                 <td>
                                     <button onclick="Editar(${val.id})" class="btn btn-icon btn-warning"><i class="fas fa-edit"></i></button>                                
-                                    <button onclick="Baja(${val.id},'D', ${val.baja?"0":"1"})" class="btn btn-icon btn-${val.baja?"primary":"danger"}"><i class="fas fa-thumbs-${val.baja?"up":"down"}"></i></button>
                                     <button onclick="Revisar(${val.id}, '${val.titulo}')" class="btn btn-icon btn-info"><i class="fas fa-clipboard-check"></i></button>
                                 </td>
                             </tr>`
@@ -458,27 +473,58 @@
 
     function Revisar(id, title){
         $('.title-revision').text(title)
-        $('#md-revision').modal('toggle')
-    }
-
-    function CargarActividadRevision(id){
-
-        $.get("{{route('actividades.estudiantes')}}", {"id":id},
-            function (data) {
-
-                console.log(data)
-                
-            }
-        );
-
-
+        $('#form-tarea').hide()
+        $('#form-examen').hide();
+        $('#calificacion').val(null)
+        actividadSeleccionada = id
         $.ajax({
-            method: "GET",
-            url: "{{route('actividadesest.obtener')}}",
-            data: {"id":id, "est":$('#select-matriculados').val()},
+            type: "GET",
+            url: "{{route('actividades.estudiantes')}}",
+            data: {"id":id},
             dataType: "json",
             success: function (res) {
                 console.log(res)
+                $('#select-matriculados').empty();
+                $('#select-matriculados').append(`<option value="">Elija una opción</option>`)
+                $.each(res, function (i, val) { 
+                    $('#select-matriculados').append(`<option value="${val.id}">${val.nombre}</option>`)
+                });                
+                $('#md-revision').modal('toggle')
+            }
+        });
+
+
+        
+    }
+
+    function CargarActividadRevision(id){       
+        let data = {"id":id, "est":$('#select-matriculados').val()}
+        console.log(data)
+        $.ajax({
+            method: "GET",
+            url: "{{route('actividadesest.obtener')}}",
+            data: data,
+            dataType: "json",
+            success: function (res) {
+                console.log(res)
+                if(res.data==null){
+                    swal("Aviso", "El alumno no envio su actividad.", "warning")
+                }else{
+                    $('#idactest').val(res.data.id)
+                    if(res.data.tipoActividadesId==2){                      
+                        $('#form-examen').show();
+                        let dataExamen = JSON.parse(res.data.productoEstudiante)
+                        let examenDocente = JSON.parse(res.data.examen)
+                        $('#form-examen').empty();
+                        $.each(dataExamen, function (i, val) { 
+                            $('#form-examen').append(`<p>${i+1}-. ${examenDocente[i].pregunta}</p><div class="width:100%; padding:1rem;"><input class="form-control" type="text" value="${val.respuesta}"/><p style="color:#bbb; font-weight:700; margin-left:1rem;">Respuesta: ${examenDocente[i].respuesta}</p></div>`);
+                        });
+                        $('#form-examen').show();
+                    }else{
+                        $('#frameTareas').attr('src', "{{asset('actividades/estudiantes/productos')}}/"+res.data.materialAdjunto);
+                        $('#form-tarea').show()
+                    }
+                }
                
             }
         });      
